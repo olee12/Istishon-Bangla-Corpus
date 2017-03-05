@@ -1,0 +1,109 @@
+উইন্ডোজের পাসওয়ার্ড_ সেটা আবার কি জিনিস !!!
+
+
+নিজের পিসির পাসওয়ার্ড ভুলে গেছেন? বন্ধুর বাসায় বেড়াতে গেছেন? কলিগের ডেস্কে বসেছেন? অন্যের কম্পিউটারে স্পায়িং করবেন নাকি ..........
+উইন্ডোজ অপারেটিং সিস্টেম হলে সামনে আগান।
+উইন্ডোজ তার ইউজার ইনফরমেশন গুলো \windows\system32\config লোকেশনে sam নামক ফাইলে বাইনারি ফরমেটে সেভ করে রাখে যা রেজিস্ট্রি এর অংশ এবং বেশ সুরক্ষিত।
+আমরা সেই সুরক্ষিত ফাইলটি মডিফাই করতে পারলেই কেল্লা ফতে। নিচের লেখা দেখে হিজিবিজি মনে হলেও আসলে এন্টার চাপা ছাড়া আপনার কোন কাজ নেই...
+এর জন্য আপনার দরকার হবে ছোট্ট একটি সফটওয়্যার যা সিডি বা পেনড্রাইভে বুটএবল করে রাইট করতে হবে।
+সিডির জন্য ডাউনলোড করুন এখান থেকে।
+পেনড্রাইভের জন্য ডাউনলোড করুন এখান থেকে।
+এখনকার যামানায় সিডি তেমন ব্যবহার হয়না। আর সিডি পকেটে নিয়ে কে ঘুরবে বলেন!
+যাই হোক, দুইটার নিয়ম একই।
+সিডি হলে জিফ ফাইলের মধ্যে একটি ISO ফাইল পাবেন সেটা রাইট করে ফেলুন। আর USB হলে নিচের নিয়ম অনুসরন করুন-
+১. জিফ ফাইলের সব ডাটা আনজিফ করে একটি USB ডিস্কে কপি করুন (অন্য ফাইল থাকলে সমস্যা নেই, সেগুলো রিমুভ হবার ভয় নেই)।
+২. cmd চালু করুন "run as administrator" দিয়ে।
+৩. কমান্ড লাইনে X:syslinux.exe -ma  দিয়ে এন্টার দিন। এখানে X এর স্থানে আপনার পেনড্রাইভের ড্রাইভ লেটার দিন।
+এন্টার দেবার পরে কিছুই দেখাবেনা, কিন্তু আপনার কাজ হয়ে গেছে।
+চলুন শুরু করা যাক:
+১. যে পিসির পাসওয়ার্ড রিমুভ করতে চান সেই পিসিতে আপনার সিডি বা পেনড্রাইভ ঢুকিয়ে সেটা থেকে বুট করুন। প্রথমে এমন একটা স্ক্রিন দেখবেন-
+Press enter to boot, or give linux kernel boot options first if needed.
+Some that I have to use once in a while:
+boot nousb - to turn off USB if not used and it causes problems
+boot irqpoll - if some drivers hang with irq problem messages
+boot nodrivers - skip automatic disk driver loading
+ boot:
+এন্টার চাপুন।
+২. এবার আপনি নিচের মত স্ক্রিন পাবেন-
+Disks:
+Disk /dev/sda: x-amount GB, x-amount bytes
+Candidate Windows partitions found:
+1: /dev/sda1 x-amountMB BOOT
+2: /dev/sda2 x-amountMB
+Please select partition by number or:
+q = quit
+d = automatically start disk drivers
+m = manually select disk drivers to load
+f = fetch additional drivers from floppy/usb
+a = show all partitions found
+l = show probably Windows (NTFS) partitions only
+Select: [1]
+আপনি 1 লিখে এন্টার চাপুন। এতে কোন ড্রাইভে উইন্ডোজ ইন্সটল করা আছে তা ডিটেক্ট করবে।
+৩. এমন স্ক্রিন পাবেন-
+Selected 1
+Mounting from /dev/sda1, with assumed filesystem type NTFS
+So, let's really check if it is NTFS?
+Yes, read-write seems OK.
+Mounting it. This may take up to a few minutes:
+Success!
+Step TWO: Select PATH and registry files
+DEBUG path: windows found as Windows
+DEBUG path: system32 found as System32
+DEBUG path: config found as config
+DEBUG path: found correct case to be: Windows/System32/config
+What is the path to the registry directory (relative to windows disk)?
+[Windows/System32/config]:
+এন্টার চাপুন।
+৪. এবার নিচের স্ক্রিন পাবেন-
+DEBUG path: found correct case to be: Windows/System32/config
+
+Select which part of registry to load, use predefined choices or list the files with space as delimiter
+1 - Password reset [sam system security]
+2 - RecoveryConsole parameters [software]
+q - quit - return to previous
+[1] :
+নিশ্চয় আপনি 1 লিখে ইন্টার দিবেন।
+৫. এবার আপনি ঐ পিসির সকল ইউজারের তালিকা পেয়ে যাবেন।
+==chntpw Edit User Info & Passwords==
+RID ---- Username ----- Admin? --- | -Lock? --
+01f4 | Administrator | ADMIN | dis/lock
+03ea | User1 | dis/lock
+03e9 | User 2 | dis/lock
+01f5 | Guest | dis/lock
+Select: ! - quit, . - list users, 0x - User with RID (hex), or simply enter the username to change: [Administrator]
+কোন ইউজারের পাসওয়ার্ড রিমুভ করতে চান সেটা লিখে এন্টার দিন। Administrator হলে Administrator লিখে এন্টার দিন।
+৬. এবার আপনি ঐ ইউজারের সকল তথ্য দেখতে পাবেন-
+RID : 0500 [01f4]
+Username: Administrator
+fullname:
+comment: Built-in account for administering the computer/domain
+homedir:
+User is member of 1 groups:
+00000220 = Administrators (which has x members)
+Account bits: 0x0211 =
+[x] Disabled | [ ] Homedir req. | [ ] Passwd not req.
+[ ] Temp. duplicate | [x] Normal account | [ ] NMS account
+[ ] Domain trust ac | [ ] Wks trust act. | [ ] Srv trust act
+[x] Pwd don't expir | [ ] Auto lockout | [ ] (unknown 0x08)
+[ ] (unknown 0x10) | [ ] (unknown 0x20) | [ ] (unknown 0x40)
+Failed login count: 0, while max tries is: 0
+Total login count: 15
+----User Edit Menu:
+1 - Clear (blank) user password
+2 - Edit (set new) user password (careful with this on XP or Vista)
+3 - Promote user (make user an administrator)
+4 - Unlock and enable user account [probably locked now]
+q - Quit editing user, back to user select
+Select: [q]
+এখানেই মূল কাজ। এখানে 1 লিখে এন্টার দিন তাকলে ঐ ইউজারের পাসওয়ার্ড রিমুভ হয়ে যাবে।
+2 লিখে এন্টার দিলে পাসওয়ার্ড বদলাতে পারবেন। 3 লিখে এন্টার দিলে সাধারন ইউজারেকে আপনি Adminstrator বানাতে পারবেন। 4 লিখে ইন্টার দিলে কোন ইউজার ডিস্যাবল করা থাকলে তাকে এ্যানাবল করতে পারবেন।
+কি করবেন সেটা নিশ্চয় বলে দিতে হবেনা।
+ধরে নিলাম আপনি 1 লিখে এন্টার করেছেন। তাহলে আপনি নিচের স্ক্রিন পাবেন-
+Step Four: Writing back changes
+About to write files back! Do it? [n]:
+এখানে আপানে প্রশ্ন করা হচ্ছে এতক্ষন যা যা করেছেন তার সব আনডু করবেন কিনা। মাথা খারাপ!!! n লিখে এন্টার দিন।
+New run? [n]
+নতুন কিছু করবেন কিনা শুনছে। n লিখে এন্টার দিন।
+এবার Ctrl-Alt-Delete চেপে পিসি রিবুট করুন আর পেনড্রাইভ বা সিডে বের করে ফেলুন। কারন এর পরে আপনি পিসিতে কি করবেন সেটা আপনার ব্যপার......
+ডিসক্লেইমার: টিউটোরিয়ালটি শুধুমাত্র জানার জন্য এবং বিপদে কাজে লাগানোর জন্য। কোন অসাধু কাজে ব্যবহার করার জন্য নিরুৎসাহিত করা হচ্ছে এবং কেউ এর জন্য ক্ষতিগ্রস্থ হলে লেখক কোনভাবেই দায়ভার বহন করবেন না।
+
